@@ -1,0 +1,144 @@
+{
+  "expo": {
+    "name": "Benacion Sports",
+    "slug": "benacion-sports",
+    "scheme": "benacionsports",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/logo.png",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0A2463"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "icon": "./assets/icon.png",
+      "googleServicesFile": "./app/GoogleService-Info.plist",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false,
+        "LSApplicationQueriesSchemes": [
+          "about",
+          "youtube"
+        ],
+        "UIBackgroundModes": [
+          "remote-notification"
+        ],
+        "NSUserTrackingUsageDescription": "This app does not collect or share personal data. Tracking permissions may be requested by third-party libraries such as Firebase and AppsFlyer for attribution or analytics purposes.",
+        "NSUserNotificationsUsageDescription": "We will remind you before your favorite matches and your own games start.",
+        "NSPhotoLibraryUsageDescription": "This app requires access to your photo library to add team logos.",
+        "NSPhotoLibraryAddUsageDescription": "This app requires permission to save images to your photo library.",
+        "NSCameraUsageDescription": "This app requires access to the camera to take team photos.",
+        "SKAdNetworkItems": [
+          {
+            "SKAdNetworkIdentifier": "v9wttpbfk9.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "n38lu8286q.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "cstr6suwn9.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "eqhxz8m8av.skadnetwork"
+          }
+        ]
+      },
+      "bundleIdentifier": "com.benaciionsssportsss",
+      "associatedDomains": [
+        "benacionsports.onelink.me"
+      ]
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0A2463"
+      },
+      "package": "com.benaciionsssportsss",
+      "permissions": [
+        "android.permission.POST_NOTIFICATIONS",
+        "com.google.android.gms.permission.AD_ID",
+        "android.permission.CAMERA",
+        "android.permission.INTERNET",
+        "android.permission.SCHEDULE_EXACT_ALARM",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "googleServicesFile": "./app/google-services.json"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-asset",
+      "expo-font",
+      "@react-native-community/datetimepicker",
+      "@react-native-firebase/app",
+      [
+        "onesignal-expo-plugin",
+        {
+          "mode": "production"
+        }
+      ],
+      [
+        "expo-tracking-transparency",
+        {
+          "userTrackingPermission": "This identifier will be used to deliver personalized ads to you."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "This app requires access to your photo library to add team logos.",
+          "cameraPermission": "This app requires access to the camera to take team photos."
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static",
+            "forceStaticLinking": [
+              "RNFBApp"
+            ],
+            "deploymentTarget": "15.1",
+            "stripDebugSymbols": true,
+            "enableBitcode": false
+          },
+          "android": {
+            "extraMavenRepos": [
+              "../../node_modules/@notifee/react-native/android/libs"
+            ],
+            "enableProguardInReleaseBuilds": true,
+            "extraGradlePlugins": {
+              "com.google.gms.google-services": "4.4.2"
+            },
+            "extraAppGradlePlugins": [
+              "com.google.gms.google-services"
+            ],
+            "extraDependencies": [
+              "implementation platform('com.google.firebase:firebase-bom:33.3.0')",
+              "implementation 'com.google.firebase:firebase-analytics'"
+            ],
+            "enableMinifyInReleaseBuilds": true
+          }
+        }
+      ],
+      "react-native-appsflyer"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "700064d7-b38b-443f-b0a5-da55e343a93f"
+      }
+    },
+    "runtimeVersion": "1.0.0",
+    "updates": {
+      "requestHeaders": {
+        "expo-channel-name": "production"
+      },
+      "url": "https://u.expo.dev/700064d7-b38b-443f-b0a5-da55e343a93f"
+    },
+    "owner": "alex_react-natuve"
+  }
+}
