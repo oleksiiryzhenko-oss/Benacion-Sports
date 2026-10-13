@@ -15,9 +15,9 @@ workflows:
         - app_store
       ios_signing:
         distribution_type: app_store
-        bundle_identifier: com.benacionsports
+        bundle_identifier: com.benaciionsssportsss
       vars:
-        BUNDLE_ID: "com.benacionsports"
+        BUNDLE_ID: "com.benaciionsssportsss"
         XCODE_WORKSPACE: "BenacionSports.xcworkspace"
         XCODE_SCHEME: "BenacionSports"
         NODE_ENV: "production"
@@ -104,7 +104,7 @@ workflows:
       android_signing:
         - benacion_keystore
       vars:
-        PACKAGE_NAME: "com.benacionsports"
+        PACKAGE_NAME: "com.benaciionsssportsss"
         NODE_ENV: "production"
       node: 20
       java: 17
