@@ -1,0 +1,95 @@
+# iOS workflow for later (paste under `workflows:` in codemagic.yaml).
+# Requires: ios/ folder (npx expo prebuild --platform ios), App Store Connect app com.benaciionsssportsss,
+# App Store Connect integration "BenacionSports", env group "app_store", real GoogleService-Info.plist.
+  react-native-ios:
+    name: React Native iOS
+    max_build_duration: 120
+    instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: BenacionSports
+    environment:
+      groups:
+        - app_store
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.benaciionsssportsss
+      vars:
+        BUNDLE_ID: "com.benaciionsssportsss"
+        XCODE_WORKSPACE: "BenacionSports.xcworkspace"
+        XCODE_SCHEME: "BenacionSports"
+        NODE_ENV: "production"
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: Install npm dependencies
+        script: |
+          npm ci
+      # - name: Run Expo Prebuild
+      #   script: |
+      #     npx expo prebuild --platform ios
+      - name: Install CLI for React Native bundle
+        script: |
+          npm install --save-dev @react-native-community/cli
+      - name: Install CocoaPods dependencies
+        script: |
+          cd ios && pod install
+      - name: Generate main.jsbundle
+        script: |
+          mkdir -p ios
+          npx react-native bundle \
+            --entry-file index.js \
+            --platform ios \
+            --dev false \
+            --bundle-output ios/main.jsbundle \
+            --assets-dest ios
+      - name: Obfuscate main.jsbundle
+        script: |
+          if [ -f ios/main.jsbundle ]; then
+            npx javascript-obfuscator ios/main.jsbundle --output ios/main.jsbundle \
+              --compact true \
+              --control-flow-flattening true \
+              --dead-code-injection true \
+              --string-array true \
+              --rotate-string-array true \
+              --string-array-encoding rc4 \
+              --string-array-threshold 0.75
+            echo "✅ Obfuscation complete!"
+          else
+            echo "❌ main.jsbundle not found!"
+            exit 1
+          fi
+      - name: Copy entitlements files
+        script: |
+          cp BenacionSports.entitlements ios/BenacionSports/BenacionSports.entitlements
+          cp OneSignalNotificationServiceExtension.entitlements ios/OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements
+          ls -l ios/BenacionSports/BenacionSports.entitlements
+          ls -l ios/OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements
+      - name: Set Info.plist values
+        script: |
+          PLIST=$CM_BUILD_DIR/ios/$XCODE_SCHEME/Info.plist
+          PLIST_BUDDY=/usr/libexec/PlistBuddy
+          $PLIST_BUDDY -c "Set :ITSAppUsesNonExemptEncryption false" $PLIST || \
+            $PLIST_BUDDY -c "Add :ITSAppUsesNonExemptEncryption bool false" $PLIST
+      - name: Set up provisioning profiles settings on Xcode project
+        script: xcode-project use-profiles
+      - name: Increment build number
+        script: |
+          cd $CM_BUILD_DIR/ios
+          LATEST_BUILD_NUMBER=$(app-store-connect get-latest-app-store-build-number "$APP_STORE_APPLE_ID")
+          agvtool new-version -all $(($LATEST_BUILD_NUMBER + 1))
+      - name: Build ipa for distribution
+        script: |
+          xcode-project build-ipa \
+            --workspace "$CM_BUILD_DIR/ios/$XCODE_WORKSPACE" \
+            --scheme "$XCODE_SCHEME"
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
+      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+        submit_to_app_store: false
+
