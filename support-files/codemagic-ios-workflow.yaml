@@ -23,7 +23,7 @@
     scripts:
       - name: Install npm dependencies
         script: |
-          npm ci
+          npm ci --include=dev
       # - name: Run Expo Prebuild
       #   script: |
       #     npx expo prebuild --platform ios

@@ -18,7 +18,8 @@ workflows:
     scripts:
       - name: Install npm dependencies
         script: |
-          npm ci
+          # NODE_ENV=production makes npm skip devDependencies (javascript-obfuscator is needed by metro.config.js)
+          npm ci --include=dev
       - name: Set Android SDK location
         script: |
           echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/android/local.properties"
